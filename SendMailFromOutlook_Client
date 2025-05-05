@@ -1,0 +1,19 @@
+import win32com.client
+
+# Connect to Outlook
+outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
+
+# Access inbox (index 6 = Inbox)
+inbox = outlook.GetDefaultFolder(6)
+messages = inbox.Items
+messages.Sort("[ReceivedTime]", True)  # Sort by recent first
+
+for message in messages:
+    try:
+        print("Subject:", message.Subject)
+        print("From:", message.SenderName)
+        print("Received:", message.ReceivedTime)
+        print("Body:", message.Body[:100])  # Print first 100 characters
+        print("-" * 50)
+    except AttributeError:
+        continue
