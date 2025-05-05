@@ -1,0 +1,27 @@
+import smtplib
+from email.message import EmailMessage
+
+email_address = 'your-email@outlook.com'
+email_password = 'your-app-password'  # Use an App Password if 2FA is on
+
+msg = EmailMessage()
+msg['Subject'] = 'Test Email via Outlook SMTP'
+msg['From'] = email_address
+msg['To'] = 'recipient@example.com'
+msg.set_content('This is a test email sent via Outlook SMTP.')
+
+# Add attachment (optional)
+file_path = r'C:\path\to\file.pdf'
+with open(file_path, 'rb') as f:
+    file_data = f.read()
+    file_name = f.name
+
+msg.add_attachment(file_data, maintype='application', subtype='octet-stream', filename=file_name)
+
+# Send via Outlook SMTP
+with smtplib.SMTP('smtp.office365.com', 587) as smtp:
+    smtp.starttls()
+    smtp.login(email_address, email_password)
+    smtp.send_message(msg)
+
+print("Email sent successfully via Outlook SMTP.")
